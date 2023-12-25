@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  echo:
+    build: 
+      context: ./Dockerfile/echo/
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    # networks:
+    #   - our_net
+    container_name: echoframework04
+    # environment:
+    #   POSTGRESQL_URL: 'postgres://echo:echo@postgresGolangTutorial01:5432/echo?sslmode=disable'
+    command: sleep infinity
