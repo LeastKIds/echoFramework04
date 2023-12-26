@@ -7,7 +7,7 @@ import (
 )
 
 type AuthRepository interface {
-	InsertUser(user *modelAuth.User) (*modelAuth.User, error)
+	InsertUser(user *modelAuth.User) error
 }
 
 type authRepositoryImpl struct {
@@ -18,9 +18,9 @@ func NewAuthRepositoryImpl(db *gorm.DB) AuthRepository {
 	return &authRepositoryImpl{db}
 }
 
-func (ari *authRepositoryImpl) InsertUser(user *modelAuth.User) (*modelAuth.User, error) {
+func (ari *authRepositoryImpl) InsertUser(user *modelAuth.User) error {
 	if err := ari.db.Create(user).Error; err != nil {
-		return nil, err
+		return err
 	}
-	return user, nil
+	return nil
 }

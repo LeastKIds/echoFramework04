@@ -11,7 +11,7 @@ start:
 	@$(AIR)
 
 migrations-up:
-	@$(MIGRATE) -database $(POSTGRESQL_URL) -path $(MIGRATIONS_DIR) up
+	$(MIGRATE) -database $(POSTGRESQL_URL) -path $(MIGRATIONS_DIR) up
 
 migrations-down:
 	@$(MIGRATE) -database $(POSTGRESQL_URL) -path $(MIGRATIONS_DIR) down
