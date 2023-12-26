@@ -8,6 +8,7 @@ import (
 
 type AuthRepository interface {
 	InsertUser(user *modelAuth.User) error
+	GetUserByEmail(email string) (*modelAuth.User, error)
 }
 
 type authRepositoryImpl struct {
@@ -23,4 +24,13 @@ func (ari *authRepositoryImpl) InsertUser(user *modelAuth.User) error {
 		return err
 	}
 	return nil
+}
+
+func (ari *authRepositoryImpl) GetUserByEmail(email string) (*modelAuth.User, error) {
+	var user modelAuth.User
+	err := ari.db.Where("email = ?", email).First(&user)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return &user, nil
 }

@@ -29,8 +29,39 @@ func NewAuthServiceImpl(ar repository.AuthRepository, validate *validator.Valida
 }
 
 func (a *authServiceImpl) SignIn(c echo.Context) error {
+	signInRequest := vo.SignInRequest{}
+	if err := c.Bind(&signInRequest); err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusBadRequest, "json format error")
+	}
+	if err := a.validate.Struct(signInRequest); err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusBadRequest, "json format error")
+	}
 
-	return c.JSON(http.StatusOK, "test ok!dafafdasfd1231312312321a")
+	user, err := a.ar.GetUserByEmail(signInRequest.Email)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusBadRequest, "Email or password is incorrect.")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(signInRequest.Password)); err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusBadRequest, "Email or password is incorrect.")
+	}
+
+	signInResponse := vo.SignInResponse{}
+	copier.Copy(&signInResponse, user)
+
+	accessToken, err := jwt.TokenConfig(user, c)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "Server error")
+	}
+
+	signInResponse.AccessToken = accessToken
+
+	return c.JSON(http.StatusOK, signInResponse)
 }
 
 func (a *authServiceImpl) SignUp(c echo.Context) error {
