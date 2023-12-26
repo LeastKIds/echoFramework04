@@ -1,14 +1,19 @@
 package auth
 
 import (
-	"app/service/auth"
+	repository "app/repository/auth"
+	service "app/service/auth"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
-func AuthController(e *echo.Echo) {
-	authService := auth.NewAuthServiceImpl()
+func AuthController(e *echo.Echo, db *gorm.DB, validate *validator.Validate) {
+	authService := service.NewAuthServiceImpl(
+		repository.NewAuthRepositoryImpl(db), validate)
+
 	authRouter := e.Group("/auth")
 
 	authRouter.POST("/sign-in", authService.SignIn)

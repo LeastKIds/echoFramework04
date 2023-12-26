@@ -3,7 +3,9 @@ package routes
 import (
 	"app/config"
 	controllerAuth "app/controller/auth"
+	"app/db"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo/v4"
@@ -28,7 +30,10 @@ func NewRouter() (*echo.Echo, config.EnvConfig) {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	controllerAuth.AuthController(e)
+	db := db.NewDB(&cfg, e)
+	validate := validator.New()
+
+	controllerAuth.AuthController(e, db, validate)
 
 	return e, cfg
 }
