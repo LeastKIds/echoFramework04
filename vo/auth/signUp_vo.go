@@ -8,8 +8,9 @@ type SignUpRequest struct {
 }
 
 type SignUpResponse struct {
-	ID        uint      `json:"id"`
-	Email     string    `json:"email"`
-	CreatedUp time.Time `json:"created_up"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          uint      `json:"id"`
+	Email       string    `json:"email"`
+	CreatedUp   time.Time `json:"created_up"`
+	UpdatedAt   time.Time `json:"updated_at"`
+	AccessToken string    `json:"access_token"`
 }

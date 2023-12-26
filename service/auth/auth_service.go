@@ -3,6 +3,7 @@ package auth
 import (
 	model "app/model/auth"
 	repository "app/repository/auth"
+	"app/util/jwt"
 	vo "app/vo/auth"
 	"net/http"
 
@@ -61,6 +62,14 @@ func (a *authServiceImpl) SignUp(c echo.Context) error {
 
 	signUpResponse := vo.SignUpResponse{}
 	copier.Copy(&signUpResponse, &user)
+
+	accessToken, err := jwt.TokenConfig(&user, c)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "Server error")
+	}
+
+	signUpResponse.AccessToken = accessToken
 
 	return c.JSON(http.StatusOK, signUpResponse)
 }

@@ -41,3 +41,7 @@ func TestSignIn(t *testing.T) {
 	assert.Equal(t, http.StatusOK, r4.StatusCode, string(responseBody4))
 
 }
+
+func TestSignUp(t *testing.T) {
+
+}

@@ -21,6 +21,6 @@ func AuthController(e *echo.Echo, db *gorm.DB, validate *validator.Validate) {
 	authRouter.POST("/logout", authService.Logout)
 
 	authRouter.GET("/health-check", func(c echo.Context) error {
-		return c.String(http.StatusOK, "auth ok!!")
+		return c.String(http.StatusOK, "auth ok!!3")
 	})
 }
