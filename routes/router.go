@@ -26,6 +26,9 @@ func NewRouter() (*echo.Echo, config.EnvConfig) {
 
 	e := echo.New()
 
+	config.CORSConfigSetting(e)
+	config.CSRFConfigSetting(e)
+
 	e.Logger.SetLevel(log.DEBUG)
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
